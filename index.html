@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesher Academy IT Support Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
+        button:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Kesher Academy IT Support Portal</h2>
+    <p>Please fill out the form below to submit a support ticket:</p>
+    
+    <form id="supportForm" onsubmit="handleFormSubmit(event)">
+        <div class="form-group">
+            <label for="userName">Your Name</label>
+            <input type="text" id="userName" placeholder="Enter your full name..." required>
+        </div>
+        
+        <div class="form-group">
+            <label for="userEmail">School Email</label>
+            <input type="email" id="userEmail" placeholder="name@kesheracademy.org" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" required>
+                <option value="">Select issue type...</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Google Workspace">Google Workspace</option>
+                <option value="Network/Wi-Fi">Network / Wi-Fi</option>
+                <option value="Software/Apps">Software / Apps</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Issue Description</label>
+            <textarea id="description" rows="4" placeholder="Describe the issue in detail..." required></textarea>
+        </div>
+
+        <button type="submit">Submit Ticket</button>
+    </form>
+</div>
+
+<!-- JavaScript Integration Logic -->
+<script>
+  const SHEET_API_URL = "https://api.sheetbest.com/sheets/c375139b-3af9-4221-852a-89014c9cb0de";
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const ticketData = {
+      TicketID: "TICKET-" + Math.floor(1000 + Math.random() * 9000),
+      UserEmail: document.getElementById("userEmail").value,
+      UserName: document.getElementById("userName").value,
+      Category: document.getElementById("category").value,
+      Description: document.getElementById("description").value,
+      Status: "Open",
+      Timestamp: new Date().toLocaleString()
+    };
+
+    try {
+      let response = await fetch(SHEET_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ticketData)
+      });
+
+      if (response.ok) {
+        alert("Ticket submitted successfully! It has been logged to your sheet.");
+        document.getElementById("supportForm").reset();
+      } else {
+        alert("Error submitting ticket. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Network error while submitting ticket.");
+    }
+  }
+</script>
+
+</body>
+</html>
