@@ -37,7 +37,7 @@ document.getElementById('recent').innerHTML=ticketMarkup(items.slice(0,3));docum
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));const names={home:'Good morning, Maya',request:'Create a support request',tickets:'My support requests',admin:'IT service desk',assets:'Asset inventory',users:'Users & access',organizations:'Organizations & locations',categories:'Request categories'};document.getElementById('pageTitle').textContent=names[id];window.scrollTo(0,0)}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>go(b.dataset.view));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
-// Connected to spreadsheet backend via fetch submission
+// Connected to Sheet Best API endpoint
 document.getElementById('requestForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -56,8 +56,7 @@ document.getElementById('requestForm').addEventListener('submit', async function
   };
 
   try {
-    // Replace YOUR_API_ENDPOINT_URL with your actual Sheet Best or backend endpoint URL
-    const response = await fetch('YOUR_API_ENDPOINT_URL', {
+    const response = await fetch('https://api.sheetbest.com/sheets/0157a581-e5eb-4bd9-858c-c91661c6b516', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
